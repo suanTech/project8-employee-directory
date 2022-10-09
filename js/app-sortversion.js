@@ -5,7 +5,6 @@ const overlay = document.querySelector('.overlay');
 const modalContainer = document.querySelector('.modal-content');
 const modalClose = document.querySelector('.modal-close');
 const modalArrow = document.querySelector('.modal-arrow');
-const searchInput = document.querySelector('.search');
 const sortButton = document.querySelector('.sort');
 
 
@@ -40,20 +39,6 @@ function displayEmployees(employeeData) {
 }
 
 
-// modal window
-gridContainer.addEventListener('click', modalLoad);
-modalClose.addEventListener('click', () => {
-    overlay.classList.add("hidden");
-})
-function modalLoad(e) {
-    if(e.target !== gridContainer) {
-        const clickedCard = e.target.closest(".card");
-        let index = clickedCard.getAttribute('data-index');
-        displayModal(index);
-        modalSlide(index);
-    }
-};
-
 function displayModal (index) {
     let { name, email, phone, location:{city, street, state, postcode}, dob, picture } = employees[index];
     let date = new Date(dob.date);
@@ -71,7 +56,34 @@ function displayModal (index) {
     `
     overlay.classList.remove("hidden");
     modalContainer.innerHTML = modalHTML;
-};
+}
+
+// modal window open and close
+gridContainer.addEventListener('click', e => {
+    if(e.target !== gridContainer) {
+        const clickedCard = e.target.closest(".card");
+        let index = clickedCard.getAttribute('data-index');
+        displayModal(index);
+        modalSlide(index);
+    }
+})
+modalClose.addEventListener('click', () => {
+    overlay.classList.add("hidden");
+})
+
+sortButton.addEventListener('click', () => {
+    displayEmployees(employees.sort((a, b) => filterByName(a,b)))
+})
+
+
+// name filter function
+function filterByName (a, b) {
+    const nameA = a.name.first
+    const nameB = b.name.first
+    if(nameA < nameB) return -1;
+    if(nameA > nameB) return 1;
+    return 0;
+}
 
 function modalSlide (index) {
     modalArrow.addEventListener('click', e => {
@@ -93,32 +105,5 @@ function modalSlide (index) {
             }
         }
     })
-};
-
-
-// search filter
-searchInput.addEventListener('input', filterByName);
-function filterByName (e) {
-    let input = e.target.value;
-    input = input.toUpperCase();
-    const names = document.querySelectorAll('.name');
-    names.forEach(name => {
-        if(name.textContent.toUpperCase().includes(input)){
-            name.parentNode.parentNode.style.display = 'flex';
-        } else {
-            name.parentNode.parentNode.style.display = 'none';
-        }
-    })
 }
 
-// sort by name button
-sortButton.addEventListener('click', () => {
-    displayEmployees(employees.sort((a, b) => sortName(a,b)))
-})
-function sortName (a, b) {
-    const nameA = a.name.first
-    const nameB = b.name.first
-    if(nameA < nameB) return -1;
-    if(nameA > nameB) return 1;
-    return 0;
-}
