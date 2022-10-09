@@ -5,6 +5,7 @@ const overlay = document.querySelector('.overlay');
 const modalContainer = document.querySelector('.modal-content');
 const modalClose = document.querySelector('.modal-close');
 const modalArrow = document.querySelector('.modal-arrow');
+const sortButton = document.querySelector('.sort');
 
 
 fetch(urlAPI)
@@ -17,7 +18,6 @@ function displayEmployees(employeeData) {
     employees = employeeData;
     let employeeHTML = ``;
     employees
-        .sort((a, b) => filterByName(a,b))
         .forEach((employee, index) => {
         let name = employee.name;
         let email = employee.email;
@@ -71,6 +71,9 @@ modalClose.addEventListener('click', () => {
     overlay.classList.add("hidden");
 })
 
+sortButton.addEventListener('click', () => {
+    displayEmployees(employees.sort((a, b) => filterByName(a,b)))
+})
 
 
 // name filter function
