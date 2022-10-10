@@ -75,22 +75,21 @@ function displayModal (index) {
 
 function modalSlide (index) {
     modalArrow.addEventListener('click', e => {
-        e = e.target
-        if(e.classList.contains('left')) {
-            index = index - 1
-            if(index >= 0) {
-                displayModal(index);
-            } else {
-                overlay.classList.add('hidden');
+        e = e.target;
+        index = parseInt(index);
+        if (index < 11 && index != 12) {
+            if (e.classList.contains('right')) {
+                displayModal(index += 1);
             }
-        } 
-        if(e.classList.contains('right')) {
-            index = +index + 1
-            if(index < 12) {
-                displayModal(index)
-            } else {
-                overlay.classList.add('hidden')
+        }  else {
+            overlay.classList.add('hidden');
+        }
+        if (index < 12 && index != 0) {
+            if (e.classList.contains('left')) {
+                displayModal(index -= 1);
             }
+        } else {
+            overlay.classList.add('hidden');
         }
     })
 };
